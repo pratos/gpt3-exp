@@ -4,8 +4,31 @@ version = "0.1.0"
 description = ""
 authors = ["Prathamesh Sarang <prathamesh@difference-engine.ai>"]
 
+[tool.black]
+line-length = 90
+target-version = ['py36']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.eggs
+    | \.git
+    | \.__pycache__
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | \.env
+    | _build
+    | buck-out
+    | build
+    | dist
+)/
+'''
+
 [tool.poetry.dependencies]
 python = "^3.6"
+alembic = "^1.4.2"
+sqlalchemy = "^1.3.18"
+streamlit = "^0.64.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
