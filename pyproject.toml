@@ -29,9 +29,12 @@ python = "^3.6"
 alembic = "^1.4.2"
 sqlalchemy = "^1.3.18"
 streamlit = "^0.64.0"
+openai = "^0.2.4"
+openai-finetune = "^0.0.1-rc.9"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
+jupyter = "^1.0.0"
 
 [build-system]
 requires = ["poetry>=0.12"]
