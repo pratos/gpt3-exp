@@ -1,0 +1,18 @@
+name: marathi-transliteration
+language: marathi
+nlp_task: transliteration
+input: EnglishTrans
+output: Marathi
+dataset:
+  one:
+    "EnglishTrans: Teen tappyat ladhlya gelelya ya ladhaii chya suruvatipasun april chya purvardhat japan ne kohima ridge hi jaga jinkun imphal kade janara rasta tabyat ghetla\n
+    Marathi: तीन टप्प्यांत लढल्या गेलेल्या या लढाईच्या सुरुवातीस एप्रिलच्या पूर्वार्धात जपानने कोहिमा रिज ही जागा जिंकून इंफाळकडे जाणारा रस्ता ताब्यात घेतला\n\n"
+  two:
+    "EnglishTrans: Rajyat 4 April 2020 paryant 635 jananna yachi lagan jhali asun tya paiki 32 janancha mrutyu jhala aahe ani 52 jan purna bare jhalele aahet\n
+    Marathi: राज्यात ४ एप्रिल २०२० पर्यंत ६३५ जणांना याची लागण झाली असून त्यापैकी ३२ जणांचा मृत्यू झाला आहे आणि ५२ जण पूर्ण बरे झालेले आहेत.\n\n"
+  three:
+    "EnglishTrans: Nanded shahar he maharahstra rajyachya marathwada vibhagat aslele ani nanded jilha chya prashasakiya mukhya layat aahe. ya sharala aitihasik ani dharmik vaarsa labhlela aahe. Nanded he nav shri shankara chya nandi ya vahanachya nava varun padlele aslyache sangnyat yete.\n
+    Marathi: नान्देड शहर हे महाराष्ट्र राज्याच्या मराठवाडा विभागात असलेले आणि नान्देड जिल्ह्याचे प्रशासकीय मुख्यालय आहे. या शहराला ऐतिहासिक आणि धार्मिक वारसा लाभलेला आहे. नान्देड हे नाव श्रीशंकराच्या नन्दी या वाहनाच्या नावावरून पडले असल्याचे सांगण्यात येते.\n\n"
+  four:
+    "EnglishTrans: Godavari khoryatil loka marathi ani telugu bhashik aahet. nijam kalat urdu bhashecha vapar shasakiya kamkajan kela jaat ase.\n
+    Marathi: गोदावरी खोऱ्यातील लोक मराठी आणि तेलुगू भाषिक आहेत. निजाम काळात उर्दू भाषेचा वापर शासकीय कामकाजात केला जात असे.\n\n"
