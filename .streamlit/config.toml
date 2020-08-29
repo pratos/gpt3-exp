@@ -1,3 +1,6 @@
 [server]
-port = 80
 
+port = 8000
+folderWatchBlacklist = ['.venv']
+fileWatcherType = "auto"
+runOnSave = true
