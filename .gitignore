@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Custom ignored
+gpt3_config.yml
+
 .tool-versions
 
 # C extensions
