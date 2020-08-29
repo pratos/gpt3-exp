@@ -23,9 +23,7 @@ DATASETS = dict(
 
 def experimentation():
     load_openai_key()
-    """
-    Loaded OpenAI key.
-    """
+    st.write("(OpenAI key loaded)")
 
     model = st.sidebar.selectbox("Select OpenAI model:", MODELS)
     st.markdown(f"Model selected: `{model}`")
@@ -75,14 +73,14 @@ def experimentation():
 
 def load_primes(prime: str) -> Dict:
     with open(DATASETS[prime], "r") as file_handle:
-        dataset = yaml.safe_load(file_handle, Loader=yaml.FullLoader)
+        dataset = yaml.safe_load(file_handle)
 
     return dataset
 
 
 def load_openai_key():
     with open(GPT3_CONFIG_PATH, "r") as file_handle:
-        openai.api_key = yaml.safe_load(file_handle, Loader=yaml.FullLoader)["GPT3_API"]
+        openai.api_key = yaml.safe_load(file_handle)["GPT3_API"]
 
 
 def save_results(result: OpenAIObject, time_in_secs: float, og_dataset: Dict):
