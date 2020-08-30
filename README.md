@@ -12,12 +12,13 @@ I made a small `streamlit` application that helps to manage it. Right now one ca
 GPT3_API: ab-XXXXXXXXXXXXXXXXXXXXXXXX
 ```
 
+- Or you can add it via the `streamlit` app directly.
 - Install `poetry`. Follow the [official site](https://python-poetry.org/docs/#installation) or [this cookbook](https://soumendra.gitbook.io/deeplearning-cookbook/setting-up/setting-up-poetry-for-your-project)
 - Once `poetry` is installed, run `poetry install`. This will download all the packages needed (ideally in `.venv`) as well as setup the repository.
 
 ## Running the application
 
-- To run the `streamlit app`: `poetry st-server`
+- To run the `streamlit` app: `poetry run st-server`
 - You will now be able to view the application @ `localhost:8000`
 
 ## Adding new primes/dataset
@@ -29,8 +30,8 @@ GPT3_API: ab-XXXXXXXXXXXXXXXXXXXXXXXX
 ## Roadmap
 
 - [x] Experimentation dashboard
+- [x] Save results to DB
 - [ ] Add search api to experimentation dashboard
-- [ ] Save results to DB
 - [ ] Create overview dashboard based off DB
 
 ## Other Resources
