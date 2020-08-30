@@ -25,7 +25,10 @@ PARAMS = {}
 
 
 def experimentation():
-    select_option = st.sidebar.radio("Load key:", ["Add your own", "Load local config"])
+    debug = st.sidebar.selectbox("Debug mode:", [False, True])
+    select_option = st.sidebar.radio(
+        "Set API key:", ["Add your own", "Load local config"]
+    )
     if select_option == "Add your own":
         key_added = st.sidebar.text_area("Add OpenAI key:")
         key_submit = st.sidebar.button("Submit key")
@@ -59,50 +62,66 @@ def experimentation():
 
     PARAMS["stream"] = st.sidebar.selectbox("Stream output?(`stream`)", [False, True])
     show_input_ds = st.selectbox("Show Input?", [False, True])
-    PARAMS["stop"] = st.sidebar.text_input("Stop sequence value(`stop`)")
+    PARAMS["stop"] = "\n"
     PARAMS["presence_penalty"] = st.sidebar.number_input(
         "Presence penalty(`presence_penalty`)", min_value=0.0, max_value=1.0
     )
     PARAMS["frequency_penalty"] = st.sidebar.number_input(
         "Frequency penalty(`frequence_penalty`)", min_value=0.0, max_value=1.0
     )
-    PARAMS["logprobs"] = st.sidebar.number_input(
-        "Log probability(`logprobs`)", min_value=0.0, max_value=1.0
-    )
 
-    dataset = []
-    prime_type = st.radio("Select dataset", ["Examples", "Upload own"])
-    if prime_type == "Examples":
-        prime = st.selectbox("Select dataset:", list(DATASETS.keys()))
-        dataset = load_primes(prime=prime)
-    elif prime_type == "Upload own":
-        try:
+    logprobs = st.sidebar.selectbox("Include Log probabilites?", [False, True])
+    if logprobs:
+        st.write(logprobs)
+        PARAMS["logprobs"] = st.sidebar.number_input(
+            "Log probabilities(`logprobs`):", min_value=1, max_value=2048, step=1
+        )
+
+    try:
+        dataset = []
+        prime_type = st.radio("Select dataset", ["Examples", "Upload own"])
+        if prime_type == "Examples":
+            prime = st.selectbox("Select dataset:", list(DATASETS.keys()))
+            dataset = load_primes(prime=prime)
+        elif prime_type == "Upload own":
             file_string = st.file_uploader("Upload dataset", type=["yaml", "yml"])
             dataset = yaml.safe_load(file_string)
             st.success("Uploaded successfully")
-        except Exception:
-            st.error(f"[ERROR]:: {e}")
-
-    prompt = st.text_area("Enter your prompt(`prompt`)", value="Enter just the text...")
-    submit = st.button("Submit")
-    parsed_primes = "".join(list(dataset["dataset"].values()))
-
-    if show_input_ds:
-        st.info(f"{parsed_primes}\n\n{dataset['input']}:{prompt}\n{dataset['output']}:")
-
-    PARAMS[
-        "prompt"
-    ] = f"{parsed_primes}\n\n{dataset['input']}:{prompt}\n{dataset['output']}:"
-    if submit:
-        with st.spinner("Requesting completion..."):
-            ts_start = perf_counter()
-            request = openai.Completion.create(**PARAMS)
-            ts_end = perf_counter()
-        st.write(request)
-        st.error(f"Took {round(ts_end - ts_start, 3)} secs to get completion/s")
-        save_results(
-            result=request, time_in_secs=round(ts_end - ts_start, 3), og_dataset=dataset
+        prompt = st.text_area(
+            "Enter your prompt(`prompt`)", value="Enter just the text..."
         )
+        submit = st.button("Submit")
+        stop = st.button("Stop request")
+        parsed_primes = "".join(list(dataset["dataset"].values()))
+
+        if show_input_ds:
+            st.info(
+                f"{parsed_primes}\n\n{dataset['input']}:{prompt}\n{dataset['output']}:"
+            )
+
+        PARAMS[
+            "prompt"
+        ] = f"{parsed_primes}\n\n{dataset['input']}:{prompt}\n{dataset['output']}:"
+        if debug:
+            st.write(PARAMS)
+
+        if submit:
+            with st.spinner("Requesting completion..."):
+                ts_start = perf_counter()
+                request = openai.Completion.create(**PARAMS)
+                ts_end = perf_counter()
+            st.write(request)
+            st.error(f"Took {round(ts_end - ts_start, 3)} secs to get completion/s")
+            save_results(
+                result=request,
+                time_in_secs=round(ts_end - ts_start, 3),
+                og_dataset=dataset,
+            )
+        if stop:
+            st.error("Process stopped")
+            st.stop()
+    except Exception as err:
+        st.error(f"[ERROR]:: {err}")
 
 
 def load_primes(prime: str) -> Dict:
