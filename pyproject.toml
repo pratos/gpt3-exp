@@ -41,6 +41,7 @@ jupyter = "^1.0.0"
 
 [tool.poetry.scripts]
 st-server = "scripts:st_server"
+migrate = "scripts:migrations"
 test_script = "scripts:test_script"
 
 [build-system]
