@@ -1,0 +1,24 @@
+name: hindi-transliteration
+language: hindi
+nlp_task: translation
+input: Hindi
+output: Engish
+dataset:
+  one:
+    "Hindi: बेशक गलती सिर्फ तेरी नहीं\n
+    English: Without a doubt, the mistake was not entirely yours\n\n"
+  two:
+    "Hindi: खामोश रातों में आंखें तेरी भी भीगी होगी\n
+    Hindi: In silent nights, your eyes must have been wet too\n\n"
+  three:
+    "Hindi: तू भी तड़पा होगा भीगी पलकों के साथ\n
+    English: You would have missed me too with wet eyes\n\n"
+  four:
+    "Hindi: मैं एक युवा उम्र से टूट गया था\n
+    English: I was broken from a young age\n\n"
+  five:
+    "Hindi: रात के आहोश में उस पल तू भी अकेले भीगा होगा\n
+    English: In the loneliness of night, you would have also cried alone\n\n"
+  six:
+    "Hindi: आग और आग की कृपा से\n
+    English: By the grace of the fire and the flames\n\n"

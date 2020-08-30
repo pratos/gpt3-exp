@@ -1,0 +1,15 @@
+name: english-football-summarization
+language: english
+nlp_task: summarization
+input: Original Text
+output: Summarized
+dataset:
+  one:
+    "Original Text: Nagelsmann opted for a 3-1-5-1 structure against Atletico Madrid’s midfield block. From this structure his team were able to circulate the ball rather comfortably against their opponent’s front two before creating two main routes to progress. Through their presence in front of Atletico’s defensive line they could attempt to play between the lines after provoking a central midfielder to step out. Their main option however, and something they did well in particular on their left side, was to provoke the Atletico full-backs out of the shape before playing around him and into depth.\n
+    Summarized: Leipzig Isolate Full-Backs and Attack Depth\n\n"
+  two:
+    "Original Text: Against Lyon’s 5-3-2, Guardiola opted for a base 3-1-4-2 structure. With the three centre backs and Rodri as a central 6 creating a build-up diamond, City would theoretically have options to play around or between Lyon’s front two, allowing the 8s and strikers to remain higher and with the support of the wing-backs find ways to attack Lyon’s midfield and defensive lines. With such an approach, Gündogan and De Bruyne could focus on offering options to play behind Lyon’s midfield. From here, they could pin Lyon’s midfielders back offering extra time for City’s build-up diamond players and become options in the spaces behind the midfield when they attempted to step up and block options between City’s build-up players. However, the Mancunian side’s failure to attempt a single shot in the first half an hour of the game show this approach was ineffective.\n
+    Summarized: Manchester City’s Build-up Hindered by Lack of Depth Options\n\n"
+  three:
+    "Original Text: The majority of this analysis is focused on structures with a base back four, however Brighton under Graham Potter have created a similar build-up structure with a back five this season. Against Manchester City, for example, they moved their left wing-back Bernardo into a left wing position, while the left centre-back essentially became a deep full-back in possession. On the right, Montoya acted more as a typical full-back.\n
+    Summarized: Creating the Structure with an Asymmetrical Back Five\n\n"

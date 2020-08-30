@@ -1,0 +1,27 @@
+name: marathi-transliteration
+language: marathi
+nlp_task: translation
+input: Marathi
+output: English
+dataset:
+  one:
+    "Marathi: मी पाण्याच्या काठावर टक लावून बसतो\n
+    English: I've been staring at the edge of the water\n\n"
+  two:
+    "Marathi: पण मी नेहमी समुद्रावर परत येते कितीही प्रयत्न केले तरी हरकत नाही\n
+    Marathi: But I come back to the seas, no matter how hard I try\n\n"
+  three:
+    "Marathi: मी या बेटावरील प्रत्येकजण ओळखतो. या बेटावरील लोक खरोखरच आनंदी आहेत\n
+    English: I know everybody on this island, seems so happy on this island\n\n"
+  four:
+    "Marathi: असे भरपूर शब्द आहेत जे मला कळत नाहीत\n
+    English: There are many words that I don't understand.\n\n"
+  five:
+    "Marathi: अॅलेन कवी आहे.\n
+    English: Allen is a poet.\n\n"
+  six:
+    "Marathi: तो तुला जे काही सांगेल ते कर.\n
+    English: Do whatever he tells you.\n\n"
+  seven:
+    "Marathi: हे कोठे संपेल हे कोणालाही ठाऊक नाही.\n
+    English: And no one knows, how far it goes\n\n"
