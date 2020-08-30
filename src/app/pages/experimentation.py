@@ -1,6 +1,7 @@
 # flake8: noqa
 
-import re
+import json
+import sqlite3
 from pathlib import Path
 from time import perf_counter
 from typing import Dict
@@ -8,23 +9,19 @@ from typing import Dict
 import openai
 import streamlit as st
 import yaml
+from app.app_config import DATASETS, GPT3_CONFIG_PATH, MODELS, PARAMS
+from loguru import logger
 from openai.openai_object import OpenAIObject
 
-st.set_option("deprecation.showfileUploaderEncoding", False)
 
-MODELS = ["davinci", "curie", "babbage", "ada"]
-DATASET_PATH = Path(__file__).parents[2] / "gpt3_exp" / "datasets"
-GPT3_CONFIG_PATH = Path(__file__).parents[2] / "gpt3_exp" / "gpt3_config.yml"
-DATASETS = dict(
-    [
-        (re.sub(r"_", " ", str(ds).split("/")[-1].split(".yml")[0].title()), ds)
-        for ds in list(DATASET_PATH.glob("*.yml"))
-    ]
-)
-PARAMS = {}
+@st.cache(allow_output_mutation=True)
+def db_conn():
+    DB_PATH = Path(__file__).parents[3] / "db" / "results.db"
+    logger.info(f"Connecting to DB: {str(DB_PATH)}")
+    return sqlite3.connect(str(DB_PATH), check_same_thread=False)
 
 
-def experimentation():
+def experimentation() -> None:
     debug = st.sidebar.selectbox("Debug mode:", [False, True])
     select_option = st.sidebar.radio(
         "Set API key:", ["Add your own", "Load local config"]
@@ -80,52 +77,50 @@ def experimentation():
         )
     PARAMS["echo"] = st.sidebar.selectbox("Echo:", [False, True])
 
-    try:
-        dataset = []
-        prime_type = st.radio("Select dataset", ["Examples", "Upload own"])
-        if prime_type == "Examples":
-            prime = st.selectbox("Select dataset:", list(DATASETS.keys()))
-            dataset = load_primes(prime=prime)
-        elif prime_type == "Upload own":
-            file_string = st.file_uploader("Upload dataset", type=["yaml", "yml"])
-            dataset = yaml.safe_load(file_string)
-            st.success("Uploaded successfully")
-        prompt = st.text_area(
-            "Enter your prompt(`prompt`)", value="Enter just the text..."
+    # try:
+    dataset = []
+    prime_type = st.radio("Select dataset", ["Examples", "Upload own"])
+    if prime_type == "Examples":
+        prime = st.selectbox("Select dataset:", list(DATASETS.keys()))
+        dataset = load_primes(prime=prime)
+    elif prime_type == "Upload own":
+        file_string = st.file_uploader("Upload dataset", type=["yaml", "yml"])
+        dataset = yaml.safe_load(file_string)
+        st.success("Uploaded successfully")
+    prompt = st.text_area("Enter your prompt(`prompt`)", value="Enter just the text...")
+    submit = st.button("Submit")
+    stop = st.button("Stop request")
+    parsed_primes = "".join(list(dataset["dataset"].values()))
+
+    if show_input_ds:
+        st.info(f"{parsed_primes}\n\n{dataset['input']}:{prompt}\n{dataset['output']}:")
+
+    PARAMS[
+        "prompt"
+    ] = f"{parsed_primes}\n\n{dataset['input']}:{prompt}\n{dataset['output']}:"
+    if debug:
+        st.write(PARAMS)
+
+    if submit:
+        with st.spinner("Requesting completion..."):
+            ts_start = perf_counter()
+            request = openai.Completion.create(**PARAMS)
+            ts_end = perf_counter()
+        st.write(request)
+        st.write([choice["text"] for choice in request["choices"]])
+        st.error(f"Took {round(ts_end - ts_start, 3)} secs to get completion/s")
+        save_results(
+            experiment_name=experiment_name,
+            result=request,
+            time_in_secs=round(ts_end - ts_start, 3),
+            og_dataset=dataset,
+            api_params=PARAMS,
         )
-        submit = st.button("Submit")
-        stop = st.button("Stop request")
-        parsed_primes = "".join(list(dataset["dataset"].values()))
-
-        if show_input_ds:
-            st.info(
-                f"{parsed_primes}\n\n{dataset['input']}:{prompt}\n{dataset['output']}:"
-            )
-
-        PARAMS[
-            "prompt"
-        ] = f"{parsed_primes}\n\n{dataset['input']}:{prompt}\n{dataset['output']}:"
-        if debug:
-            st.write(PARAMS)
-
-        if submit:
-            with st.spinner("Requesting completion..."):
-                ts_start = perf_counter()
-                request = openai.Completion.create(**PARAMS)
-                ts_end = perf_counter()
-            st.write([choice["text"] for choice in request["choices"]])
-            st.error(f"Took {round(ts_end - ts_start, 3)} secs to get completion/s")
-            save_results(
-                experiment_name=experiment_name,
-                result=request,
-                time_in_secs=round(ts_end - ts_start, 3),
-                og_dataset=dataset,
-            )
-        if stop:
-            st.error("Process stopped")
-            st.stop()
-    except Exception as err:
-        st.error(f"[ERROR]:: {err}")
+    if stop:
+        st.error("Process stopped")
+        st.stop()
+    # except Exception as err:
+    #     st.error(f"[ERROR]:: {err}")
 
 
 def load_primes(prime: str) -> Dict:
@@ -135,12 +130,36 @@ def load_primes(prime: str) -> Dict:
     return dataset
 
 
-def load_openai_key():
+def load_openai_key() -> None:
     with open(GPT3_CONFIG_PATH, "r") as file_handle:
         openai.api_key = yaml.safe_load(file_handle)["GPT3_API"]
 
 
 def save_results(
-    experiment_name: str, result: OpenAIObject, time_in_secs: float, og_dataset: Dict
+    experiment_name: str,
+    result: OpenAIObject,
+    time_in_secs: float,
+    og_dataset: Dict,
+    api_params: Dict,
 ):
+    cursor = db_conn().cursor()
+    query = f"""
+        INSERT INTO gpt3_results (result_id, experiment_name, api_params, response_time, output_response, language, nlp_task, error_msg)
+        VALUES(?, ?, ?, ?, ?, ?, ?, ?)
+        """
+    logger.info(f"Query to be executed:\n{query}")
+    cursor.execute(
+        query,
+        [
+            result["id"],
+            experiment_name,
+            json.dumps(api_params),
+            time_in_secs,
+            ", ".join([choice["text"] for choice in result["choices"]]),
+            og_dataset["language"],
+            og_dataset["nlp_task"],
+            "",
+        ],
+    )
+    # db_conn().commit()
     st.write("Saved successfully to DB")
