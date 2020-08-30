@@ -1,4 +1,4 @@
-name: english-football-summarization
+name: football-short-summarization
 language: english
 nlp_task: summarization
 input: Original Text
