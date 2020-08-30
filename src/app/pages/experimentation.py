@@ -30,7 +30,7 @@ def experimentation():
         "Set API key:", ["Add your own", "Load local config"]
     )
     if select_option == "Add your own":
-        key_added = st.sidebar.text_area("Add OpenAI key:")
+        key_added = st.sidebar.text_area("Add OpenAI key *")
         key_submit = st.sidebar.button("Submit key")
         if key_submit:
             openai.api_key = key_added
@@ -43,6 +43,8 @@ def experimentation():
 
     PARAMS["engine"] = st.sidebar.selectbox("Select OpenAI model(`engine`):", MODELS)
     st.markdown(f"Model selected: `{PARAMS['engine']}`")
+
+    experiment_name = st.text_input("Experiment Name *", value="default-exp")
 
     PARAMS["max_tokens"] = st.sidebar.number_input(
         "Max Tokens to generate(`max_tokens`):", min_value=1, max_value=2048, step=1
@@ -114,6 +116,7 @@ def experimentation():
             st.write([choice["text"] for choice in request["choices"]])
             st.error(f"Took {round(ts_end - ts_start, 3)} secs to get completion/s")
             save_results(
+                experiment_name=experiment_name,
                 result=request,
                 time_in_secs=round(ts_end - ts_start, 3),
                 og_dataset=dataset,
@@ -137,5 +140,7 @@ def load_openai_key():
         openai.api_key = yaml.safe_load(file_handle)["GPT3_API"]
 
 
-def save_results(result: OpenAIObject, time_in_secs: float, og_dataset: Dict):
+def save_results(
+    experiment_name: str, result: OpenAIObject, time_in_secs: float, og_dataset: Dict
+):
     st.write("Saved successfully to DB")
