@@ -22,8 +22,16 @@ DATASETS = dict(
 
 
 def experimentation():
-    load_openai_key()
-    st.write("(OpenAI key loaded)")
+    key_added = st.sidebar.text_area("Add OpenAI key:")
+    key_submit = st.sidebar.button("Submit key")
+    st.sidebar.text("OR")
+    load_local = st.sidebar.button("Load local config")
+    if key_submit:
+        openai.api_key = key_added
+        st.write("(OpenAI key loaded)")
+    elif load_local:
+        load_openai_key()
+        st.write("(OpenAI key loaded)")
 
     model = st.sidebar.selectbox("Select OpenAI model:", MODELS)
     st.markdown(f"Model selected: `{model}`")
