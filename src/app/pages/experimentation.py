@@ -76,6 +76,7 @@ def experimentation():
         PARAMS["logprobs"] = st.sidebar.number_input(
             "Log probabilities(`logprobs`):", min_value=1, max_value=2048, step=1
         )
+    PARAMS["echo"] = st.sidebar.selectbox("Echo:", [False, True])
 
     try:
         dataset = []
@@ -110,7 +111,7 @@ def experimentation():
                 ts_start = perf_counter()
                 request = openai.Completion.create(**PARAMS)
                 ts_end = perf_counter()
-            st.write(request)
+            st.write([choice["text"] for choice in request["choices"]])
             st.error(f"Took {round(ts_end - ts_start, 3)} secs to get completion/s")
             save_results(
                 result=request,
