@@ -2,6 +2,8 @@
 
 ![tool-gif](assets/tool-gpt3.gif)
 
+__Note: You can view the video at [this location](https://www.loom.com/share/3384fc679e7e44e28d332dccf2802697)__
+
 This streamlit application is a personal tool to help and manage experimentation with GPT3 API. The original GPT3 playground is nice, but lacks version control and ability to save outputs for comparison.
 
 I made a small `streamlit` application that helps to manage it. Right now one can add `primes` or small datasets needed to prime the `Completion` API. This repo contains these `primes` in `src/gpt3_exp/datasets`.
