@@ -43,4 +43,8 @@ GPT3_API: ab-XXXXXXXXXXXXXXXXXXXXXXXX
 
 - GPT3 Fine Tuning: [Github Link](https://github.com/cabhijith/GPT-3_Docs/blob/master/Fine-Tune.md)
 
-PRs are welcomed. Would be happy to help out with any issues :)
+Would be happy to help out with any issues :)
+
+If you use this project, do help out:
+
+<a href="https://www.buymeacoffee.com/pratos"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=pratos&button_colour=5F7FFF&font_colour=ffffff&font_family=Cookie&outline_colour=000000&coffee_colour=FFDD00"></a>
